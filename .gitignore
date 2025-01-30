@@ -1,0 +1,44 @@
+# Ignore OS and editor-specific files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Ignore logs
+logs/
+*.log
+npm-debug.log*
+yarn-error.log
+
+# Ignore build artifacts
+*.out
+*.bin
+*.obj
+*.exe
+
+# Ignore node_modules for my-ao-db (AO Process)
+my-ao-db/node_modules/
+my-ao-db/.turbo/
+my-ao-db/.parcel-cache/
+my-ao-db/dist/
+my-ao-db/.env
+my-ao-db/yarn.lock
+my-ao-db/pnpm-lock.yaml
+my-ao-db/package-lock.json
+my-ao-db/.cache
+
+# Ignore SQLite database files
+my-ao-db/*.sqlite
+my-ao-db/scripts/*.sh
+my-ao-db/scripts/*.log
+
+# Ignore Rust target files
+rust-indexer/target/
+rust-indexer/Cargo.lock
+rust-indexer/debug/
+rust-indexer/.cargo/
+rust-indexer/.vscode/
+rust-indexer/.idea/
+rust-indexer/target/debug/
+rust-indexer/target/release/

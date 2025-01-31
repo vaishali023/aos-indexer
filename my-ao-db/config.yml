@@ -1,0 +1,4 @@
+preset: md  # Use medium preset for default settings
+stack_size: 33554432
+initial_memory: 67108864
+maximum_memory: 268435456

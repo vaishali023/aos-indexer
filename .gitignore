@@ -27,6 +27,8 @@ my-ao-db/yarn.lock
 my-ao-db/pnpm-lock.yaml
 my-ao-db/package-lock.json
 my-ao-db/.cache
+my-ao-db/vendor
+my-ao-db/test
 
 # Ignore SQLite database files
 my-ao-db/*.sqlite

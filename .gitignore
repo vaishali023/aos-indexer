@@ -29,6 +29,7 @@ my-ao-db/package-lock.json
 my-ao-db/.cache
 my-ao-db/vendor
 my-ao-db/test
+my-ao-db/.build
 
 # Ignore SQLite database files
 my-ao-db/*.sqlite

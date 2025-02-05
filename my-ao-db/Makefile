@@ -3,7 +3,7 @@ CC ?= emcc
 AR ?= emar
 CFLAGS = -sMEMORY64=1 -Wno-experimental -O3
 LUA_INC = -I/usr/local/include/lua5.4
-AO_IMAGE = "p3rmaw3b/ao:0.1.4"
+AO_IMAGE = "my-ao-db"
 
 # Directories
 LIB_SQLITE_VEC_DIR = src/lib/sqlite-vec
@@ -28,21 +28,9 @@ LSQLITE3_EMCC_OPTION = $(CFLAGS) -o lsqlite3.o -c $(LIB_SQLITE3_DIR)/lsqlite3.c 
 SQLITE3_EMCC_OPTION = $(CFLAGS) -o sqlite3.o -c $(VENDOR_SQLITE_DIR)/sqlite3.c
 
 # Targets
-all: $(BUILD_DIR)/process.js $(BUILD_DIR)/process.wasm
-
-$(BUILD_DIR)/process.js $(BUILD_DIR)/process.wasm: $(BUILD_DIR)/sqlite/libsqlite.so $(BUILD_DIR)
-	mkdir -p test
-	rm -rf $(VENDOR_AOS_DIR)/process/libs && mkdir -p $(VENDOR_AOS_DIR)/process/libs
-	cp $(SRC_PROCESS_DIR)/config.yml $(VENDOR_AOS_DIR)/process/
-	cp $(SRC_PROCESS_DIR)/config.yml $(VENDOR_AOS_DIR)/
-	cp -r $(BUILD_DIR)/* $(VENDOR_AOS_DIR)/process/libs/
-	$(DOCKER) -e DEBUG=1 -v $(VENDOR_AOS_DIR)/process:/src ao-build-module
-	mv $(VENDOR_AOS_DIR)/process/process.js test/ || true
-	mv $(VENDOR_AOS_DIR)/process/process.wasm test/ || true
-
 $(BUILD_DIR)/sqlite/libsqlite.so: $(BUILD_DIR)/lsqlite3.o $(BUILD_DIR)/sqlite-vec.o $(BUILD_DIR)/sqlite3.o
 	mkdir -p $(BUILD_DIR)/sqlite
-	$(DOCKER) sh -c "cd /worker && emar rcs sqlite/libsqlite.so sqlite-vec.o lsqlite3.o sqlite3.o"
+	$(DOCKER) sh -c "cd /worker && emar rcs .build/sqlite/libsqlite.so .build/sqlite-vec.o .build/lsqlite3.o .build/sqlite3.o"
 	rm -rf $(BUILD_DIR)/lsqlite3.o $(BUILD_DIR)/sqlite-vec.o $(BUILD_DIR)/sqlite3.o
 
 $(BUILD_DIR)/lsqlite3.o: $(LSQLITE3_DEPENDENCY) $(BUILD_DIR)
@@ -56,6 +44,9 @@ $(BUILD_DIR)/sqlite-vec.o: $(SQLITE_VEC_DEPENDENCY) $(BUILD_DIR)
 $(BUILD_DIR)/sqlite3.o: $(BUILD_DIR)
 	$(DOCKER) sh -c "cd /worker && emcc $(SQLITE3_EMCC_OPTION)"
 	rm -rf $(BUILD_DIR)/sqlite3.o && mv sqlite3.o $(BUILD_DIR)/sqlite3.o
+
+vendor: ${VENDOR_SQLITE_DIR} ${VENDOR_AOS_DIR}
+
 
 $(VENDOR_SQLITE_DIR): $(VENDOR_DIR)
 	mkdir -p $(VENDOR_SQLITE_DIR)
